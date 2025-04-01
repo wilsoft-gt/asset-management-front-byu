@@ -1,0 +1,4 @@
+@import "tailwindcss";
+.ag-theme-custom {
+  --ag-icon-font-display: none;
+  }
