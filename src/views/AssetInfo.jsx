@@ -5,21 +5,50 @@ import { useParams } from "react-router"
 import { useEffect, useState } from "react"
 import Separator from "../components/Separator"
 import { NavLink } from "react-router"
-import { IconEdit, IconTrash, IconDevices } from '@tabler/icons-react';
+import assetService from "../services/assetService"
+import userService from "../services/userService"
+import { IconEdit, IconTrash, IconDevices, IconUnlink } from '@tabler/icons-react';
+import { ReleaseAsset } from "../components/ReleaseAsset"
 
 
 export function AssetInformation () {
-  const [getAssetById] = AssetStore(useShallow(store => [store.getAssetById]))
+  const [getAssetById, updateAsset] = AssetStore(useShallow(store => [store.getAssetById, store.updateAsset]))
   const [getUserById] = UserStore(useShallow(store => [store.getUserById]))
   const [asset, setAsset] = useState({})
   const [user, setUser] = useState({})
+  const [modal, setModal] = useState()
   let params = useParams()
 
-  const getAssetInfo = () => {
+  const fetchAssetInfo = async () => {
+    const assetResult = await assetService.get(params.assetId)
+    return assetResult.data[0]
+  }
+
+  const fetchUserInfo = async (id) => {
+    const userResult = userService.get(id)
+    return userResult.data
+  }
+
+  const handleReleaseAsset = async () => {
+    const result = await assetService.release(asset.id)
+    updateAsset(result.data[0])
+    setAsset(result.data[0])
+    modal.close()
+  }
+
+  const getAssetInfo = async () => {
     let assetResult = getAssetById(params.assetId)
-    let userResult = getUserById(assetResult.fk_user_id)
+    if (!assetResult){
+      assetResult = await fetchAssetInfo()
+    }
+    if (assetResult.fk_user_id) {
+      let userResult = getUserById(assetResult.fk_user_id)
+      if (!userResult) {
+        userResult = await fetchUserInfo(assetResult.fk_user_id)
+      }
+      setUser(userResult)
+    }
     setAsset(assetResult)
-    setUser(userResult)
   }
 
   useEffect(() => {
@@ -27,31 +56,37 @@ export function AssetInformation () {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return (
-    <section>
-        <h1 className="text-3xl font-bold flex items-center gap-2"><IconDevices stroke={3}/> Asset Information</h1>
-        <Separator />
-        <p><span className="font-bold">ID: </span><span>{asset.id}</span></p>
-        <p><span className="font-bold">Serial #: </span><span>{asset.serial}</span></p>
-        <p><span className="font-bold">Model: </span><span></span>{asset.model}</p>
-        <p><span className="font-bold">Brand: </span><span>{asset.brand}</span></p>
-        <p><span className="font-bold">Size: </span><span>{asset.size ? asset.size : "N/A"}</span></p>
-        <p><span className="font-bold">Disposed: </span><span>{asset.disposed ? asset.disposed : "No"}</span></p>
-        {
-          asset.disposed ?
-          <>
-            <p><span className="font-bold">Disposed Date: </span><span></span></p>
-            <p><span className="font-bold">Disposed Reason: </span><span></span></p>
-          </>
-          : null
-        }
-        <p><span className="font-bold">User: </span><NavLink className="text-blue-500" to={`/users/${user.id}`}>{user.name ? user.name : "N/A"}</NavLink></p>
-        <p><span className="font-bold">Type: </span><span>{asset.fk_asset_type_id ? asset.fk_asset_type_id : "N/A"}</span></p>
-        <Separator />
-        <div className="flex flex-row gap-2">
-          <NavLink to={`/assets/${asset.id}/edit`} className="mb-4 min-w-30 bg-blue-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2"><IconEdit size={18} /> Edit</NavLink>
-          <NavLink to={`/assets/${asset.id}/delete`} className="mb-4 min-w-30 bg-red-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2"><IconTrash size={18} /> Delete</NavLink>
-        </div>
-      </section>
-  )
+  if (asset && user) {
+    return (
+      <section>
+          <ReleaseAsset asset={asset} setRef={setModal} action={handleReleaseAsset}  />
+          <h1 className="text-3xl font-bold flex items-center gap-2"><IconDevices stroke={3}/> Asset Information</h1>
+          <Separator />
+          <p><span className="font-bold">ID: </span><span>{asset.id}</span></p>
+          <p><span className="font-bold">Serial #: </span><span>{asset.serial}</span></p>
+          <p><span className="font-bold">Model: </span><span></span>{asset.model}</p>
+          <p><span className="font-bold">Brand: </span><span>{asset.brand}</span></p>
+          <p><span className="font-bold">Type: </span><span>{asset.type ? `${asset.type[0].toUpperCase()}${asset.type.slice(1)}` : "N/A"}</span></p>
+          <p><span className="font-bold">Size: </span><span>{asset.size ? asset.size : "N/A"}</span></p>
+          <p><span className="font-bold">User: </span>{asset.fk_user_id ? <NavLink className="text-blue-500" to={`/users/${user.id}`}>{user.name}</NavLink> : "N/A"}</p>
+          <p><span className="font-bold">Disposed: </span><span>{asset.disposed ? asset.disposed : "No"}</span></p>
+          {
+            asset.disposed ?
+            <>
+              <p><span className="font-bold">Disposed Date: </span><span></span></p>
+              <p><span className="font-bold">Disposed Reason: </span><span></span></p>
+            </>
+            : null
+          }
+          <Separator />
+          <div className="flex flex-row gap-2">
+            <NavLink to={`/assets/${asset.id}/edit`} className="mb-4 min-w-30 bg-blue-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2"><IconEdit size={18} /> Edit</NavLink>
+            <button disabled={!asset.fk_user_id} className="mb-4 min-w-30 bg-yellow-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2 disabled:bg-neutral-500 disabled:text-neutral-100 disabled:shadow-none disabled:cursor-not-allowed" onClick={() => modal.showModal()}><IconUnlink size={18} /> Release</button>
+            <NavLink to={`/assets/${asset.id}/delete`} className="mb-4 min-w-30 bg-red-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2"><IconTrash size={18} /> Delete</NavLink>
+          </div>
+        </section>
+    )
+  } else {
+    return <span>Loading...</span>
+  }
 }

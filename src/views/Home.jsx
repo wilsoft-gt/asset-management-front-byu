@@ -29,6 +29,7 @@ export default function  Home() {
                 <Route exact path="/" element={<Index />} />
                 <Route exact path="/users" element={<UserList />} />
                 <Route exact path="/users/:userId" element={<UserInformation />} />
+                <Route exact path="/users/:userId/edit" element={<UserEdit />} />
                 <Route exact path="/users/create" element={<UserEdit />}/>
                 <Route exact path="/assets" element={<AssetList />} />
                 <Route exact path="/assets/:assetId" element={<AssetInformation />} />

@@ -1,8 +1,6 @@
 import { IconSearch, IconX } from '@tabler/icons-react';
-import { useState } from 'react';
 
-export default function Search() {
-  const [text, setText] = useState("")
+export default function Search({text, setText}) {
   return (
     <div className='flex items-center gap-1 border-1 border-solid border-b-neutral-700 rounded-full p-1'>
       <IconSearch stroke={1} size={18} />

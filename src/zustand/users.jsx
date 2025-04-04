@@ -11,5 +11,9 @@ export const UserStore = create(devtools((set, get) => ({
   ...initialState,
   setUsers: (users) => set({users, isLoading: false}),
   setError: (error) => set({error, isLoading: false}),
-  getUserById: (id) => get().users.find(user => user.id == id)
+  getUserById: (id) => get().users.find(user => user.id == id),
+  updateUser: (user) => {
+    const temp = get().users.filter(u => u.id != user.id)
+    set({users: [...temp, user]})
+  }
 })))

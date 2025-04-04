@@ -12,5 +12,9 @@ export const AssetStore = create(devtools((set, get) => ({
   setAssets: (assets) => set({assets, isLoading: false}),
   setError: (error) => set({error, isLoading: false}),
   getAssetById: (id) => get().assets.find(asset => asset.id == id),
-  getAssetsByUserId: (id) => get().assets.filter(asset => asset.fk_user_id == id)
-})))
+  getAssetsByUserId: (id) => get().assets.filter(asset => asset.fk_user_id == id),
+  updateAsset: (asset) => {
+    const temp = get().assets.filter(a => a.id != asset.id)
+    set({assets: [...temp, asset]})
+  }
+}), undefined, "AssetStore"))
