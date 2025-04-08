@@ -31,26 +31,32 @@ user.releaseAssets = async (id) => {
 
 user.asignAssets = async (id, payload) => {
   const token = AuthStore.getState().token
-  const result =  await axios.post(`${VITE_HOST}:${VITE_PORT}/users/${id}/assets/assign`, {assets: payload}, {headers: {"Authorization": `Bearer ${token}`}})
+  const result =  await axios.post(`${VITE_HOST}/users/${id}/assets/assign`, {assets: payload}, {headers: {"Authorization": `Bearer ${token}`}})
   return result
 }
 
 user.update = async (id, payload) => {
   const token = AuthStore.getState().token
-  const result =  await axios.put(`${VITE_HOST}:${VITE_PORT}/users/${id}`, payload, {headers: {"Authorization": `Bearer ${token}`}})
+  const result =  await axios.put(`${VITE_HOST}/users/${id}`, payload, {headers: {"Authorization": `Bearer ${token}`}})
   return result
 }
 
 user.delete = async (id) => {
   const token = AuthStore.getState().token
-  const result = await axios.delete(`${VITE_HOST}:${VITE_PORT}/users/${id}`, {headers: {"Authorization": `Bearer ${token}`}})
+  const result = await axios.delete(`${VITE_HOST}/users/${id}`, {headers: {"Authorization": `Bearer ${token}`}})
   return result
 }
 
 user.create = async (payload) => {
   const token = AuthStore.getState().token
-  const result = await axios.get(`${VITE_HOST}:${VITE_PORT}/signup`, payload, {headers: {"Authorization": `Bearer ${token}`}})
+  const result = await axios.post(`${VITE_HOST}/users`, payload, {headers: {"Authorization": `Bearer ${token}`}})
   return result
-} 
+}
+
+user.createAuth = async (payload) => {
+  const token = AuthStore.getState().token
+  const result = await axios.post(`${VITE_HOST}/auth/signup`, payload, {headers: {"Authorization": `Bearer ${token}`}})
+  return result
+}
 
 export default user

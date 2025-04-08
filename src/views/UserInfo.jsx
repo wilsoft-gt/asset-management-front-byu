@@ -5,13 +5,15 @@ import { useShallow } from "zustand/react/shallow"
 import { useParams } from "react-router"
 import { useEffect, useState } from "react"
 import Separator from "../components/Separator"
-import { NavLink } from "react-router"
+import { NavLink, useNavigate } from "react-router"
 import userService from "../services/userService"
 import projectService from "../services/projectService"
 import assetService from "../services/assetService"
 import { IconEdit, IconTrash, IconUser, IconDevices, IconUnlink, IconLibraryPlus } from '@tabler/icons-react';
 import { ReleaseAsset } from "../components/ReleaseAsset"
 import { SearchAsset } from "../components/SearchAsset"
+import { DeleteUser } from "../components/DeleteUser"
+import toast, {Toaster} from "react-hot-toast"
 
 
 export function UserInformation () {
@@ -23,7 +25,9 @@ export function UserInformation () {
   const [userAssets, setUserAssets] = useState([])
   const [releaseModal, setReleaseModal] = useState()
   const [searchModal, setSearchModal] = useState()
+  const [deleteModal, setDeleteModal] = useState()
   const [assetToRelease, setAssetToRelease] = useState()
+  const navigator = useNavigate()
 
   let params = useParams()
 
@@ -52,6 +56,14 @@ export function UserInformation () {
 
   }
 
+  const handleDelete = async () => {
+    const result = await userService.delete(user.id)
+    console.log(result.status)
+    if (result.status == 204) navigator("/users")
+    if (result.status == 403) toast.error("Not authorized to delete the user")
+
+  }
+
   const fetchAssets = async () => {
     let assets = getAssetsByUserId(params.userId)
     if (userAssets.length < 1){
@@ -74,7 +86,7 @@ export function UserInformation () {
   const getUserInfo = async () => {
     let userResult = getUserById(params.userId)
     await setUser(userResult)
-    await fetchProjects(userResult.fk_project_id)
+    if (userResult && userResult.fk_project_id) await fetchProjects(userResult.fk_project_id)
     await fetchAssets()
   }
 
@@ -86,9 +98,10 @@ export function UserInformation () {
   if ((user && user.id) && userAssets) {
     return (
       <section>
+        <Toaster />
         <ReleaseAsset asset={assetToRelease} setRef={setReleaseModal} action={handleRelease} />
-        <SearchAsset setRef={setSearchModal} handleNewAsset={handleNewAsset} />
-        
+        <SearchAsset setRef={setSearchModal} action={handleNewAsset} />
+        <DeleteUser setRef={setDeleteModal} user={user} action={handleDelete}/>
         <h1 className="text-3xl font-bold flex items-center gap-2"><IconUser stroke={3}/> User Information</h1>
         <Separator />
         <p><span className="font-bold">ID: </span><span>{user.id}</span></p>
@@ -133,8 +146,8 @@ export function UserInformation () {
         <Separator />
         <div className="flex flex-row gap-2">
           <NavLink to={`/users/${user.id}/edit`} end className="mb-4 min-w-30 bg-blue-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2"><IconEdit size={18} /> Edit</NavLink>
-          <button className="mb-4 min-w-30 bg-yellow-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2" onClick={() => searchModal.showModal()}><IconLibraryPlus size={18} /> Add asset</button>
-          <NavLink to={`/users/${user.id}/delete`} end className="mb-4 min-w-30 bg-red-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2"><IconTrash size={18} /> Delete</NavLink>
+          <button className="mb-4 min-w-30 bg-green-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2" onClick={() => searchModal.showModal()}><IconLibraryPlus size={18} /> Add asset</button>
+          <button className="mb-4 min-w-30 bg-red-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2" onClick={() => deleteModal.showModal()}><IconTrash size={18} /> Delete</button>
         </div>
       </section>
     )

@@ -6,7 +6,7 @@ import { useShallow } from "zustand/react/shallow"
 import assetService from "../services/assetService"
 import { IconSearch, IconX, IconLibraryPlus} from '@tabler/icons-react';
 
-export const SearchAsset = ({handleNewAsset, setRef}) => {
+export const SearchAsset = ({action, setRef}) => {
   const [newAsset, setNewAsset] = useState()
   const [text, setText] = useState("")
   const [modal, setModal] = useState()
@@ -28,7 +28,7 @@ export const SearchAsset = ({handleNewAsset, setRef}) => {
   }
 
   const handleConfirm = () => {
-    handleNewAsset(newAsset)
+    action(newAsset)
     setNewAsset()
     setText("")
     modal.close()

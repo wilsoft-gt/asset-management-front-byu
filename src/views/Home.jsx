@@ -7,6 +7,7 @@ import Index from "./Index"
 import AssetList from "./AssetList"
 import { UserInformation } from "./UserInfo"
 import { AssetInformation } from "./AssetInfo"
+import { UserCreate } from "./UserCreate"
 
 import Navigation from "../sections/Navigation"
 import { TopMenu } from "../sections/TopMenu"
@@ -30,7 +31,7 @@ export default function  Home() {
                 <Route exact path="/users" element={<UserList />} />
                 <Route exact path="/users/:userId" element={<UserInformation />} />
                 <Route exact path="/users/:userId/edit" element={<UserEdit />} />
-                <Route exact path="/users/create" element={<UserEdit />}/>
+                <Route exact path="/users/create" element={<UserCreate />}/>
                 <Route exact path="/assets" element={<AssetList />} />
                 <Route exact path="/assets/:assetId" element={<AssetInformation />} />
               </Routes>

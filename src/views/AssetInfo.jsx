@@ -81,7 +81,7 @@ export function AssetInformation () {
           <Separator />
           <div className="flex flex-row gap-2">
             <NavLink to={`/assets/${asset.id}/edit`} className="mb-4 min-w-30 bg-blue-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2"><IconEdit size={18} /> Edit</NavLink>
-            <button disabled={!asset.fk_user_id} className="mb-4 min-w-30 bg-yellow-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2 disabled:bg-neutral-500 disabled:text-neutral-100 disabled:shadow-none disabled:cursor-not-allowed" onClick={() => modal.showModal()}><IconUnlink size={18} /> Release</button>
+            <button disabled={!asset.fk_user_id} className="mb-4 min-w-30 bg-yellow-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2 disabled:bg-neutral-400 disabled:text-neutral-700 disabled:shadow-none disabled:cursor-not-allowed" onClick={() => modal.showModal()}><IconUnlink size={18} /> Release</button>
             <NavLink to={`/assets/${asset.id}/delete`} className="mb-4 min-w-30 bg-red-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2"><IconTrash size={18} /> Delete</NavLink>
           </div>
         </section>

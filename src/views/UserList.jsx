@@ -6,6 +6,7 @@ import { useShallow } from "zustand/react/shallow"
 import { NavLink } from "react-router"
 import { AgGridReact } from 'ag-grid-react'
 import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community'; 
+import { IconUserPlus } from "@tabler/icons-react"
 import user from "../services/userService"
 import project from "../services/projectService"
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -40,11 +41,11 @@ export default function UserList () {
   }
 
   const griColumns = [
-    {flex: 1,field: "id",headerName: "ID", cellRenderer: props => <NavLink className="text-blue-500"to={`/users/${props.value}`} end>{props.value}</NavLink>, filter: true},
-    {flex: 2,field: "name",headerName: "Name", filter: true},
-    {flex: 1,field: "enabled",headerName: "Enabled", cellRenderer: props => <span>{props.value ? "True" : "False"}</span>},
-    {flex: 1,field: "usertype",headerName: "Type"},
-    {flex: 2,field: "fk_project_id",headerName: "Project", cellRenderer: props => props.value ? getProjectName(props.value) : "N/A"}
+    {flex: 1, field: "userid", headerName: "User ID",cellRenderer: props => <NavLink className="text-blue-500"to={`/users/${props.data.id}`} end>{props.value}</NavLink>, filter: true},
+    {flex: 2, field: "name",headerName: "Name", filter: true},
+    {flex: 1, field: "enabled",headerName: "Enabled", cellRenderer: props => <span>{props.value ? "True" : "False"}</span>},
+    {flex: 1, field: "usertype",headerName: "Type"},
+    {flex: 2, field: "fk_project_id",headerName: "Project", cellRenderer: props => props.value ? getProjectName(props.value) : "N/A"}
   ]
   
   useEffect(() => {
@@ -61,13 +62,19 @@ export default function UserList () {
   }
   if (users && projects) {
     return(
-      <>
-        <AgGridReact
-          rowData={users}
-          columnDefs={griColumns}
-          pagination={true}
-        />
-      </>
+      <section className="flex flex-col h-full">
+        <div className="flex justify-between">
+          <h1 className="font-bold text-2xl">Users</h1>
+          <NavLink to="/users/create" end className="mb-4 min-w-30 bg-green-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2"><IconUserPlus size={18} /> Add user</NavLink>
+        </div>
+        <div className="grow-1">
+          <AgGridReact
+            rowData={users}
+            columnDefs={griColumns}
+            pagination={true}
+          />
+        </div>
+      </section>
     )
   }
 }

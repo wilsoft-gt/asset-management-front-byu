@@ -37,10 +37,8 @@ export default function AssetList () {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-
   const gridColumns = [
-    {flex: 1, field: "id", headerName: "ID", cellRenderer: props => <NavLink to={`/assets/${props.value}`} className="text-blue-500">{props.value} </NavLink>, filter: true},
-    {flex: 1, field: "serial", headerName: "Serial #", filter: true},
+    {flex: 1, field: "serial", headerName: "Serial #", cellRenderer: props => <NavLink to={`/assets/${props.data.id}`} className="text-blue-500">{props.value} </NavLink>, filter: true},
     {flex: 1, field: "model", headerName: "Model", filter: true},
     {flex: 1, field: "brand", headerName: "Brand", filter: true},
     {flex: 1, field: "size", headerName: "Size", cellRenderer: props => <span className="text-neutral-600">{props.value ? props.value : "N/A"}</span>, filter: true, },
