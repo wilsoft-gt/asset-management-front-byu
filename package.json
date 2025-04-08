@@ -1,6 +1,7 @@
 {
   "name": "asset_management_front",
   "private": true,
+  "base": "/asset-management-front-byu/",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
