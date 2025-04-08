@@ -22,11 +22,11 @@ export const SearchAsset = ({action, setRef}) => {
     if (!assetResponse) {
       const fetchResponse = await assetService.getBySerial({serial: text})
       if (!fetchResponse.data[0]) setError(true)
-      assetResponse = fetchResponse.data[0]
+        assetResponse = fetchResponse.data[0]
     }
     setNewAsset(assetResponse)
   }
-
+  
   const handleConfirm = () => {
     action(newAsset)
     setNewAsset()

@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Modal } from "./Modal"
 import { IconDeviceFloppy, IconX, IconUnlink} from '@tabler/icons-react';
 
 export const ReleaseAsset = ({asset, setRef, action}) => {
   const [ref, setReferencia] = useState()
   
-  useEffect(() => {
-    setRef(ref)
-  }, [ref, setRef])
+  const handleRef = (modal) => {
+    setReferencia(modal)
+    setRef(modal)
+  }
   
   return (
-    <Modal setRef={setReferencia}>
+    <Modal setRef={handleRef}>
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             <IconUnlink stroke={3} size={30} />  

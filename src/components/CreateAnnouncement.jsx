@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
-import {Modal} from "../components/Modal"
+import { useState } from "react"
+import { Modal } from "../components/Modal"
 import { useForm } from "react-hook-form"
 import { Input, TextArea } from "./Input"
 import { Select } from "./Select"
@@ -21,12 +21,13 @@ export const CreateAnnouncement = ({setRef, action}) => {
     reset()
   }
 
-  useEffect(() => {
+  const handleModal = (modal) => {
+    setModal(modal)
     setRef(modal)
-  }, [setRef, modal])
+  }
 
   return (
-    <Modal setRef={setModal}>
+    <Modal setRef={handleModal}>
       <section className="flex flex-col gap-4">
         <h1 className="font-bold text-2xl">Create new announcement</h1>
         <form className="flex flex-col gap-4" id="createAnnouncement" action={null} onSubmit={handleSubmit(create)}>

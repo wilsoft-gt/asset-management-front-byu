@@ -42,7 +42,7 @@ asset.delete = async (assetId) => {
 
 asset.release = async (assetId) => {
   const token = AuthStore.getState().token
-  const response = await axios.post(`${VITE_HOST}/assets/${assetId}/release`, { headers: {"Authorization": `Bearer ${token}`}})
+  const response = await axios.post(`${VITE_HOST}/assets/${assetId}/release`, {}, { headers: {"Authorization": `Bearer ${token}`}})
   return response
 }
 

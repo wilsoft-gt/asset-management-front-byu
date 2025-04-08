@@ -44,11 +44,11 @@ export function UserInformation () {
     setAssetToRelease(null)
   }
 
-  const handleNewAsset = (newAsset) => {
+  const handleNewAsset = async (newAsset) => {
     try {
-      assetService.assignUser(newAsset.id, user.id)
-      updateAsset(newAsset)
-      setUserAssets([...userAssets, newAsset])
+      const response = await assetService.assignUser(newAsset.id, user.id)
+      updateAsset(response.data[0])
+      setUserAssets([...userAssets, response.data[0]])
       searchModal.close()
     } catch(e) {
       console.log(e)

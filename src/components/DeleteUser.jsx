@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Modal } from "../components/Modal"
 import { IconTrash, IconX} from '@tabler/icons-react';
 
@@ -17,12 +17,13 @@ export const DeleteUser = ({setRef, action, user}) => {
     handleClose()
   }
 
-  useEffect(() => {
+  const handleRef = (modal) => {
+    setModal(modal)
     setRef(modal)
-  }, [modal, setRef])
+  } 
 
   return (
-    <Modal setRef={setModal}>
+    <Modal setRef={handleRef}>
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             <IconTrash stroke={3} size={30} />  
