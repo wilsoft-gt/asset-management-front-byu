@@ -19,7 +19,7 @@ export default function  Home() {
   return(
     <ContainerFull>
       <Toaster />
-        <BrowserRouter>
+        <BrowserRouter basename={`${import.meta.env.BASE_URL}`}>
           <article className="w-1/4 p-2">
             <Navigation />
           </article>
