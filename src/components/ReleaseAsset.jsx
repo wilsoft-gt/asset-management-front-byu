@@ -7,7 +7,7 @@ export const ReleaseAsset = ({asset, setRef, action}) => {
   
   useEffect(() => {
     setRef(ref)
-  })
+  }, [ref, setRef])
   
   return (
     <Modal setRef={setReferencia}>

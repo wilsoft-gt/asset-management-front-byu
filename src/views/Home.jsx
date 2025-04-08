@@ -8,6 +8,8 @@ import AssetList from "./AssetList"
 import { UserInformation } from "./UserInfo"
 import { AssetInformation } from "./AssetInfo"
 import { UserCreate } from "./UserCreate"
+import { AssetCreate } from "./AssetCreate"
+import { AssetEdit } from "./AssetModify"
 
 import Navigation from "../sections/Navigation"
 import { TopMenu } from "../sections/TopMenu"
@@ -34,6 +36,8 @@ export default function  Home() {
                 <Route exact path="/users/create" element={<UserCreate />}/>
                 <Route exact path="/assets" element={<AssetList />} />
                 <Route exact path="/assets/:assetId" element={<AssetInformation />} />
+                <Route exact path="/assets/create" element={<AssetCreate />} />
+                <Route exact path="/assets/:assetId/edit" element={<AssetEdit />} />
               </Routes>
             </section>
           </article>

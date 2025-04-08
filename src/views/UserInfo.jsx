@@ -58,7 +58,6 @@ export function UserInformation () {
 
   const handleDelete = async () => {
     const result = await userService.delete(user.id)
-    console.log(result.status)
     if (result.status == 204) navigator("/users")
     if (result.status == 403) toast.error("Not authorized to delete the user")
 

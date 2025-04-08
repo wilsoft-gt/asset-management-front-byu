@@ -30,7 +30,6 @@ export const UserCreate = () => {
       const result2 = await userService.createAuth(data)
       newUser = result2.data[0]
     }
-    console.log(newUser)
     updateUser(newUser)
     navigator(`/users/${newUser.id}`)
   }
@@ -58,6 +57,7 @@ export const UserCreate = () => {
           : null
         }
       </form>
+      <Separator />
       <div className="flex gap-4">
         <button form="createForm" className="mb-4 min-w-30 bg-blue-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2"><IconUserPlus size={18} /> Create</button>
         <NavLink to="/users" end className="mb-4 min-w-30 bg-red-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2" onClick={() => navigator("/users")}><IconX size={18} /> Cancel</NavLink>

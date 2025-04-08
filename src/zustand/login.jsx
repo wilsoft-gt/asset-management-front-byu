@@ -9,9 +9,9 @@ const initialState = {
 
 export const AuthStore = create(devtools((set) => ({
   ...initialState,
-  login: ({token, userData}) => set({token, userData, isLogedIn: true}, undefined, "AuthStore/login"),
-  logout: () => set({...initialState}, undefined, "AuthStore/logout")
-})))
+  login: ({token, userData}) => set({token, userData, isLogedIn: true}, undefined, "login"),
+  logout: () => set({...initialState}, undefined, "logout")
+}), {name: "LoginStore"}))
 
 
 

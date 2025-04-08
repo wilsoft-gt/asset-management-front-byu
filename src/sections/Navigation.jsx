@@ -10,7 +10,7 @@ export default function Navigation() {
       </div>
       <Separator />
       <Menu> 
-        <MenuItem route="/" label="Index" icon={<IconHome size={18}/>} />
+        <MenuItem route="/" label="Home" icon={<IconHome size={18}/>} />
         <MenuItem route="/users" label="Users" icon={<IconUsers size={18}/>} />
         <MenuItem route="/assets" label="Assets" icon={<IconDevicesPc size={18}/>} />
       </Menu>

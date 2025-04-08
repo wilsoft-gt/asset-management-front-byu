@@ -1,31 +1,31 @@
 import axios from "axios";
 import { AuthStore } from "../zustand/login";
 
-const {VITE_HOST, VITE_PORT} = import.meta.env
+const {VITE_HOST} = import.meta.env
 const user = {}
 
 
 user.getAll = async () => {
   const token = AuthStore.getState().token
-  const result =  await axios.get(`${VITE_HOST}:${VITE_PORT}/users`, {headers: {"Authorization": `Bearer ${token}`}})
+  const result =  await axios.get(`${VITE_HOST}/users`, {headers: {"Authorization": `Bearer ${token}`}})
   return result
 }
 
 user.get = async (id) => {
   const token = AuthStore.getState().token
-  const result = await axios.get(`${VITE_HOST}:${VITE_PORT}/users/${id}`, {headers: {"Authorization": `Bearer ${token}`}})
+  const result = await axios.get(`${VITE_HOST}/users/${id}`, {headers: {"Authorization": `Bearer ${token}`}})
   return result
 }
 
 user.getAssets = async (id) => {
   const token = AuthStore.getState().token
-  const result =  await axios.get(`${VITE_HOST}:${VITE_PORT}/users/${id}/assets`, {headers: {"Authorization": `Bearer ${token}`}})
+  const result =  await axios.get(`${VITE_HOST}/users/${id}/assets`, {headers: {"Authorization": `Bearer ${token}`}})
   return result
 } 
 
 user.releaseAssets = async (id) => {
   const token = AuthStore.getState().token
-  const result =  await axios.post(`${VITE_HOST}:${VITE_PORT}/users/${id}/assets/release`, {headers: {"Authorization": `Bearer ${token}`}})
+  const result =  await axios.post(`${VITE_HOST}/users/${id}/assets/release`, {headers: {"Authorization": `Bearer ${token}`}})
   return result
 }
 

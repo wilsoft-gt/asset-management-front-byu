@@ -9,9 +9,9 @@ import toast, {Toaster} from "react-hot-toast"
 import { useForm } from 'react-hook-form';
 
 export default function Login () {
-  const {VITE_HOST, VITE_PORT} = import.meta.env
+  const {VITE_HOST} = import.meta.env
   const setLogedIn = AuthStore(store => store.login)
-  const { register, handleSubmit} = useForm({ defaultValues: {username: "WilsonOmar", password: "Omar4291."}})
+  const { register, handleSubmit} = useForm({ defaultValues: {username: "administrator", password: "Administrator1234$"}})
   
   const handleLogin = async (data) => {
     const errors = {
@@ -27,7 +27,7 @@ export default function Login () {
     }
     
     try {
-      const response = await axios.post(`${VITE_HOST}:${VITE_PORT}/auth/login`, data)
+      const response = await axios.post(`${VITE_HOST}/auth/login`, data)
       const {id, username, name, enabled, usertype, fk_project_id} = jwtDecode(response.data.token)
       setLogedIn({token: response.data.token, userData: {id, username, name, enabled, usertype, fk_project_id}})
     } catch(e) {

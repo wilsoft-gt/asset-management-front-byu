@@ -1,18 +1,26 @@
 import { AuthStore } from "../zustand/login"
 import { IconLogout } from '@tabler/icons-react';
-import { useNavigate } from 'react-router'
+import { UserStore } from "../zustand/users";
+import { AssetStore } from "../zustand/assets";
+import { ProjectsStore } from "../zustand/projects";
+import { useShallow } from "zustand/react/shallow";
+
 export default function Profile() {
   const userData = AuthStore(store => store.userData)
-  const logout = AuthStore(store => store.logout)
-  const navigation = useNavigate()
+  const resetAssets = AssetStore(store => store.resetAssets)
+  const resetProjects = ProjectsStore(store=>store.resetProjects)
+  const resetUsers = UserStore(store => store.resetUsers)
+  const [logout] = AuthStore(useShallow(store => [store.logout]))
 
   const handleLogout = () => {
-    navigation("/")
     logout()
+    resetAssets()
+    resetProjects()
+    resetUsers()
   }
 
   return(
-    <div className="flex flex-col text-center" id="profileContainer">
+    <div className="flex flex-col text-center z-50" id="profileContainer">
       <h2 className="font-bold text-xl">
         Welcome {userData.name}
       </h2>
