@@ -46,7 +46,7 @@ export default function Login () {
         <CardBody>
           <form id="loginform" onSubmit={handleSubmit(handleLogin)}>
             <Input value="WilsonOmar" name="username" label="User Name" hook={register}/>
-            <Input value="Omar4291." name="password" label="Password" hook={register}/>
+            <Input value="Omar4291." name="password" label="Password" hook={register} type="password"/>
           </form>
         </CardBody>
         <footer className='w-100'>
