@@ -11,7 +11,7 @@ import { useForm } from 'react-hook-form';
 export default function Login () {
   const {VITE_HOST} = import.meta.env
   const setLogedIn = AuthStore(store => store.login)
-  const { register, handleSubmit} = useForm({ defaultValues: {username: "administrator", password: "Administrator1234$"}})
+  const { register, handleSubmit} = useForm()
   
   const handleLogin = async (data) => {
     const errors = {
