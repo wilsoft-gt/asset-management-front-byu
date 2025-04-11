@@ -1,5 +1,14 @@
 import axios from "axios";
 import { AuthStore } from "../zustand/login";
+import auth from "./authService";
+
+axios.interceptors.response.use(null, function(error){
+  if (error.status === 401) {
+    auth.logout()
+  }
+  return Promise.reject(error)
+})
+
 
 const {VITE_HOST} = import.meta.env
 const asset = {}
@@ -49,6 +58,12 @@ asset.release = async (assetId) => {
 asset.getBySerial = async (payload) => {
   const token = AuthStore.getState().token
   const response = await axios.post(`${VITE_HOST}/assets/serial`, payload, { headers: {"Authorization": `Bearer ${token}`}})
+  return response
+}
+
+asset.getStats = async () => {
+  const token = AuthStore.getState().token
+  const response = await axios.get(`${VITE_HOST}/assets/statistics`, { headers: {"Authorization": `Bearer ${token}`}})
   return response
 }
 

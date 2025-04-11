@@ -10,6 +10,7 @@ import { AssetInformation } from "./AssetInfo"
 import { UserCreate } from "./UserCreate"
 import { AssetCreate } from "./AssetCreate"
 import { AssetEdit } from "./AssetModify"
+import { Reports } from "./Reports"
 
 import Navigation from "../sections/Navigation"
 import { TopMenu } from "../sections/TopMenu"
@@ -38,6 +39,7 @@ export default function  Home() {
                 <Route exact path="/assets/:assetId" element={<AssetInformation />} />
                 <Route exact path="/assets/create" element={<AssetCreate />} />
                 <Route exact path="/assets/:assetId/edit" element={<AssetEdit />} />
+                <Route exact path="/reports" element={<Reports />} />
               </Routes>
             </section>
           </article>

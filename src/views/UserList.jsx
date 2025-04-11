@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { AuthStore } from "../zustand/login"
+import auth from "../services/authService"
 import { UserStore } from "../zustand/users"
 import { ProjectsStore } from "../zustand/projects"
 import { useShallow } from "zustand/react/shallow"
@@ -13,17 +13,11 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 
 export default function UserList () {
-  const [logout] = AuthStore(useShallow(store => [store.logout]))
   const [setUsers, setError] = UserStore(useShallow(store => [store.setUsers, store.setError]))
   const [projects, setProjects] = ProjectsStore(useShallow(store=> [store.projects, store.setProjects]))
   const [isLoading, error, users] = UserStore(useShallow(store => [store.isLoading, store.error, store.users]))
   
-
-  const getProjectName = (id) => {
-    const result = projects.find(project => project.id == id)
-    return result.name
-  }
-
+  
   const getUsersList = async () => {
     try {
       const result = await user.getAll()
@@ -35,11 +29,16 @@ export default function UserList () {
     } catch(e) {
       setError(e)
       if (e && e.status == 401) {
-        logout()
+        auth.logout()
       }
     }
   }
-
+   
+  const getProjectName = (id) => {
+    const result = projects.find(project => project.id == id)
+    return result.name
+  }
+  
   const griColumns = [
     {flex: 1, field: "userid", headerName: "User ID",cellRenderer: props => <NavLink className="text-blue-500"to={`/users/${props.data.id}`} end>{props.value}</NavLink>, filter: true},
     {flex: 2, field: "name",headerName: "Name", filter: true},

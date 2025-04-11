@@ -17,5 +17,5 @@ export const AssetStore = create(devtools((set, get) => ({
     const temp = get().assets.filter(a => a.id != asset.id)
     set({assets: [...temp, asset]}, undefined, "updateUser")
   },
-  resetAssets: () => set(initialState)
+  reset: () => set(initialState)
 }), {name: "AssetStore"}))

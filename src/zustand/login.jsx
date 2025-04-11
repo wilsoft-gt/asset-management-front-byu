@@ -10,7 +10,7 @@ const initialState = {
 export const AuthStore = create(devtools((set) => ({
   ...initialState,
   login: ({token, userData}) => set({token, userData, isLogedIn: true}, undefined, "login"),
-  logout: () => set({...initialState}, undefined, "logout")
+  reset: () => set({...initialState}, undefined, "logout")
 }), {name: "LoginStore"}))
 
 

@@ -1,7 +1,16 @@
 import axios from "axios";
 import { AuthStore } from "../zustand/login";
+import auth from "./authService";
 
-const {VITE_HOST, VITE_PORT} = import.meta.env
+axios.interceptors.response.use(null, function(error){
+  if (error.status === 401) {
+    auth.logout()
+  }
+  return Promise.reject(error)
+})
+
+
+const {VITE_HOST} = import.meta.env
 const project = {}
 
 project.getAll = async () => {

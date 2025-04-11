@@ -16,5 +16,5 @@ export const UserStore = create(devtools((set, get) => ({
     const temp = get().users.filter(u => u.id != user.id)
     set({users: [...temp, user]}, undefined, "updateUser")
   },
-  resetUsers: () => set({...initialState})
+  reset: () => set({...initialState})
 }),{name: "UserStore"}))
