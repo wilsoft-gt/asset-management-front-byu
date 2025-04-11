@@ -52,7 +52,16 @@ export default function Login () {
         <footer className='w-100'>
           <button type='submit' form='loginform' className='mb-4 w-100 bg-neutral-700 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer'>Login</button>
         </footer>
-      </Card>      
+        <p className='text-neutral-400 text-xs'>
+          <span>
+            Developed by Wilson Romero
+          </span>  
+          <br />
+          <span>
+            BYU-I CSE-497 Senior Project
+          </span>
+        </p>
+      </Card>
     </ContainerFull>
   )
 }

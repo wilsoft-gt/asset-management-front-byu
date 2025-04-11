@@ -8,7 +8,7 @@ export default function Navigation() {
   const userData = AuthStore(store => store.userData)
   
   return (
-    <section className="p-4 h-full w-full bg-white rounded-md shadow-md">
+    <section className="p-4 h-full w-full bg-white rounded-md shadow-md relative">
       <div className="flex gap-2 items-center justify-between">
         <h1 className='font-bold text-xl'>Menu</h1>
         <IconMenu2 stroke={1.5} size={25}/>
@@ -26,8 +26,17 @@ export default function Navigation() {
           : null
         
         }
+
       </Menu>
-      <Separator />
+      <p className='text-neutral-400 text-xs bottom-0 absolute mb-3'>
+          <span>
+            Developed by Wilson Romero
+          </span>  
+          <br />
+          <span>
+            BYU-I CSE-497 Senior Project
+          </span>
+        </p>
 
     </section>
   )
