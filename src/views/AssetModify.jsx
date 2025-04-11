@@ -51,6 +51,8 @@ export const AssetEdit = () => {
     const response = await assetService.update(assetId,modifiedFields)
     reset(response.data[0])
     updateAsset(response.data[0])
+    navigator("/users")
+
   }
 
   useEffect(() => {
