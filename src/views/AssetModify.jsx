@@ -40,18 +40,22 @@ export const AssetEdit = () => {
   }
 
   const updateAssetInfo = async (data) => {
-    const modifiedFields = Object.keys(data).reduce((acc, key) => {
-      if(data[key] !== asset[key]) {
-        acc[key] = data[key]
-      }
-      return acc
-    }, {})
-    modifiedFields.disposed = parseInt(modifiedFields.disposed)
-    modifiedFields.size = parseInt(modifiedFields.size)
-    const response = await assetService.update(assetId,modifiedFields)
-    reset(response.data[0])
-    updateAsset(response.data[0])
-    navigator("/users")
+    try {
+      const modifiedFields = Object.keys(data).reduce((acc, key) => {
+        if(data[key] !== asset[key]) {
+          acc[key] = data[key]
+        }
+        return acc
+      }, {})
+      modifiedFields.disposed = parseInt(modifiedFields.disposed)
+      modifiedFields.size = parseInt(modifiedFields.size)
+      const response = await assetService.update(assetId,modifiedFields)
+      reset(response.data[0])
+      updateAsset(response.data[0])
+      navigator("/users")
+    } catch(e){
+      toast.error(JSON.stringify(e))
+    }
 
   }
 
