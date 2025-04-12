@@ -72,7 +72,7 @@ export const AssetEdit = () => {
   return(
     <section className="flex gap-4 flex-col">
       <Toaster />
-      <h1 className="font-bold text-2xl">Create asset</h1>
+      <h1 className="font-bold text-2xl">Editing asset</h1>
       <Separator />
       <form id="createForm" action={null} onSubmit={handleSubmit(updateAssetInfo)}>
         <div className="flex gap-4">
