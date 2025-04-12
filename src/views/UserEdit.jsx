@@ -53,7 +53,7 @@ export default function UserEdit () {
     setUser(response.data[0])
     updateUser(response.data[0])
     reset(response.data[0])
-    navigate(-1)
+    navigate(`/users/${user.id}`)
   }
   
   useEffect(() => {

@@ -52,7 +52,7 @@ export const AssetEdit = () => {
       const response = await assetService.update(assetId,modifiedFields)
       reset(response.data[0])
       updateAsset(response.data[0])
-      navigator("/users")
+      navigator(`/assets/${assetId}`)
     } catch(e){
       toast.error(JSON.stringify(e))
     }
@@ -92,7 +92,7 @@ export const AssetEdit = () => {
       <Separator />
       <div className="flex gap-4">
         <button form="createForm" className="mb-4 min-w-30 bg-blue-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2"><IconPlus size={18} /> Save</button>
-        <NavLink to="/assets" end className="mb-4 min-w-30 bg-red-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2" onClick={() => navigator("/users")}><IconX size={18} /> Cancel</NavLink>
+        <NavLink to="/assets" end className="mb-4 min-w-30 bg-red-500 pt-1 pb-1 rounded-sm text-white hover:shadow-md hover:bg-neutral-600 hover:text-neutral-100 cursor-pointer flex justify-center items-center gap-2"><IconX size={18} /> Cancel</NavLink>
       </div>
     </section>
   )
