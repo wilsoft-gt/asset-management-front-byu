@@ -1,13 +1,9 @@
-import { UserStore } from "../zustand/users"
 import { AssetStore } from "../zustand/assets"
-import { ProjectsStore } from "../zustand/projects"
-import { useShallow } from "zustand/react/shallow"
 import { useParams } from "react-router"
 import { useEffect, useState } from "react"
 import Separator from "../components/Separator"
 import { NavLink, useNavigate } from "react-router"
 import userService from "../services/userService"
-import projectService from "../services/projectService"
 import assetService from "../services/assetService"
 import { IconEdit, IconTrash, IconUser, IconDevices, IconUnlink, IconLibraryPlus } from '@tabler/icons-react';
 import { ReleaseAsset } from "../components/ReleaseAsset"
@@ -17,12 +13,8 @@ import toast, {Toaster} from "react-hot-toast"
 
 
 export function UserInformation () {
-  const [getUserById] = UserStore(useShallow(store => [store.getUserById]))
-  const [getAssetsByUserId, updateAsset] = AssetStore(useShallow(store => [store.getAssetsByUserId, store.updateAsset]))
-  const [getProjectById, setProjects] = ProjectsStore(useShallow(store => [store.getProjectById, store.setProjects]))
-  const [project, setProject] = useState({})
+  const updateAsset = AssetStore(store => store.updateAsset)
   const [user, setUser] = useState({})
-  const [userAssets, setUserAssets] = useState([])
   const [releaseModal, setReleaseModal] = useState()
   const [searchModal, setSearchModal] = useState()
   const [deleteModal, setDeleteModal] = useState()
@@ -38,8 +30,8 @@ export function UserInformation () {
 
   const handleRelease = async () => {
     const result = await assetService.release(assetToRelease.id)
+    setUser({...user, assets: user.assets.filter(asset => asset.id != assetToRelease.id)})
     updateAsset(result.data[0])
-    setUserAssets([...userAssets.filter(asset => asset.id != result.data[0].id)])
     releaseModal.close()
     setAssetToRelease(null)
   }
@@ -48,7 +40,7 @@ export function UserInformation () {
     try {
       const response = await assetService.assignUser(newAsset.id, user.id)
       updateAsset(response.data[0])
-      setUserAssets([...userAssets, response.data[0]])
+      setUser({...user, assets: [...user.assets, newAsset]})
       searchModal.close()
     } catch(e) {
       console.log(e)
@@ -63,30 +55,9 @@ export function UserInformation () {
 
   }
 
-  const fetchAssets = async () => {
-    let assets = getAssetsByUserId(params.userId)
-    if (userAssets.length < 1){
-      const resultAssets = await userService.getAssets(params.userId)
-      assets = resultAssets.data
-    }
-    setUserAssets(assets)
-  }
-
-  const fetchProjects = async (id) => {
-    let projectData = getProjectById(id)
-    if (!projectData) {
-      projectData = await projectService.get(id)
-      setProjects(projectData.data)
-      projectData = projectData.data.find(project => project.id == id)
-    }
-    setProject(projectData)
-  }
-
   const getUserInfo = async () => {
-    let userResult = getUserById(params.userId)
-    await setUser(userResult)
-    if (userResult && userResult.fk_project_id) await fetchProjects(userResult.fk_project_id)
-    await fetchAssets()
+    let result = await userService.getDetails(params.userId)
+    setUser(result.data[0])
   }
 
   useEffect(() => {
@@ -94,7 +65,7 @@ export function UserInformation () {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if ((user && user.id) && userAssets) {
+  if (user && user.id) {
     return (
       <section>
         <Toaster />
@@ -108,10 +79,10 @@ export function UserInformation () {
         <p><span className="font-bold">Name: </span><span>{user.name}</span></p>
         <p><span className="font-bold">Enabled: </span><span>{user.enabled == 1 ? "True" : "False"}</span></p>
         <p><span className="font-bold">User Type: </span><span>{user.usertype}</span></p>
-        <p><span className="font-bold">Project: </span><span>{user.fk_project_id ? project.name : "Not set"}</span></p>
+        <p><span className="font-bold">Project: </span><span>{user.project.id ? user.project.name : "Not set"}</span></p>
         <h2 className="text-2xl font-bold flex items-center gap-2 mt-10"><IconDevices />Asets</h2>
         <Separator />
-        { userAssets && userAssets.length > 0 ?
+        { user.assets && user.assets.length > 0 ?
                 <table className="w-full border-collapse mb-7 shadow-md shadow-neutral-300">
                   <thead className="">
                     <tr className="bg-neutral-400">
@@ -125,7 +96,7 @@ export function UserInformation () {
                     </tr>
                   </thead>
                   <tbody>
-                  {userAssets.map((asset, index) => {
+                  {user.assets.map((asset, index) => {
                     return(
                       <tr key={index} className="odd:bg-white even:bg-neutral-200">
                         <td className="border-t-neutral-300 border-t-solid border-t-1 text-center pt-2 pb-2 font-bold">{asset.id}</td>

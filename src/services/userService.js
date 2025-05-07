@@ -25,6 +25,12 @@ user.get = async (id) => {
   return result
 }
 
+user.getDetails = async (id) => {
+  const token = AuthStore.getState().token
+  const result = await axios.get(`${VITE_HOST}/users/${id}/details`, {headers: {"Authorization": `Bearer ${token}`}})
+  return result
+}
+
 user.getAssets = async (id) => {
   const token = AuthStore.getState().token
   const result =  await axios.get(`${VITE_HOST}/users/${id}/assets`, {headers: {"Authorization": `Bearer ${token}`}})

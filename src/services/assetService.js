@@ -25,6 +25,12 @@ asset.get = async (id) => {
   return response
 }
 
+asset.getDetails = async (id) => {
+  const token = AuthStore.getState().token
+  const response = await axios.get(`${VITE_HOST}/assets/${id}/details`, { headers: {"Authorization": `Bearer ${token}`}})
+  return response
+}
+
 asset.create = async (payload) => {
   const token = AuthStore.getState().token
   const response = await axios.post(`${VITE_HOST}/assets`, payload, { headers: {"Authorization": `Bearer ${token}`}})

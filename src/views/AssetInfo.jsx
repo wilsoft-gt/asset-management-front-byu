@@ -1,12 +1,9 @@
-import { UserStore } from "../zustand/users"
 import { AssetStore } from "../zustand/assets"
-import { useShallow } from "zustand/react/shallow"
 import { useParams, useNavigate } from "react-router"
 import { useEffect, useState } from "react"
 import Separator from "../components/Separator"
 import { NavLink } from "react-router"
 import assetService from "../services/assetService"
-import userService from "../services/userService"
 import { IconEdit, IconTrash, IconDevices, IconUnlink } from '@tabler/icons-react';
 import { ReleaseAsset } from "../components/ReleaseAsset"
 import { DeleteAsset } from "../components/DeleteAsset"
@@ -14,10 +11,8 @@ import toast, {Toaster} from "react-hot-toast"
 
 
 export function AssetInformation () {
-  const [getAssetById, updateAsset] = AssetStore(useShallow(store => [store.getAssetById, store.updateAsset]))
-  const [getUserById] = UserStore(useShallow(store => [store.getUserById]))
+  const updateAsset = AssetStore(store => store.updateAsset)
   const [asset, setAsset] = useState({})
-  const [user, setUser] = useState({})
   const [releaseModal, setReleaseModal] = useState()
   const [deleteModal, setDeleteModal] = useState()
   const navigator = useNavigate()
@@ -25,13 +20,8 @@ export function AssetInformation () {
 
 
   const fetchAssetInfo = async () => {
-    const assetResult = await assetService.get(params.assetId)
+    const assetResult = await assetService.getDetails(params.assetId)
     return assetResult.data[0]
-  }
-
-  const fetchUserInfo = async (id) => {
-    const userResult = userService.get(id)
-    return userResult.data
   }
 
   const handleReleaseAsset = async () => {
@@ -51,17 +41,7 @@ export function AssetInformation () {
   }
 
   const getAssetInfo = async () => {
-    let assetResult = getAssetById(params.assetId)
-    if (!assetResult){
-      assetResult = await fetchAssetInfo()
-    }
-    if (assetResult.fk_user_id) {
-      let userResult = getUserById(assetResult.fk_user_id)
-      if (!userResult) {
-        userResult = await fetchUserInfo(assetResult.fk_user_id)
-      }
-      setUser(userResult)
-    }
+    let assetResult = await fetchAssetInfo()
     setAsset(assetResult)
   }
 
@@ -70,7 +50,7 @@ export function AssetInformation () {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if (asset && user) {
+  if (asset && asset.id) {
     return (
       <section>
           <Toaster />
@@ -84,7 +64,7 @@ export function AssetInformation () {
           <p><span className="font-bold">Brand: </span><span>{asset.brand}</span></p>
           <p><span className="font-bold">Type: </span><span>{asset.type ? `${asset.type[0].toUpperCase()}${asset.type.slice(1)}` : "N/A"}</span></p>
           <p><span className="font-bold">Size: </span><span>{asset.size ? asset.size : "N/A"}</span></p>
-          <p><span className="font-bold">User: </span>{asset.fk_user_id ? <NavLink className="text-blue-500" to={`/users/${user.id}`}>{user.name}</NavLink> : "N/A"}</p>
+          <p><span className="font-bold">User: </span>{asset.assigned_to ? <NavLink className="text-blue-500" to={`/users/${asset.assigned_to.id}`}>{asset.assigned_to.name}</NavLink> : "N/A"}</p>
           <p><span className="font-bold">Disposed: </span><span>{asset.disposed ? asset.disposed : "No"}</span></p>
           {
             asset.disposed ?
